@@ -1,0 +1,68 @@
+{% load survey_tags %}
+{% for o in block.options.all %}
+    <div class="w-full flex flex-col text-center">
+        <div class="p-4 border border-mid rounded-md relative group">
+            <div>
+                {% if request.GET.editoption == o.pk|slugify %}
+                    <div class="flex flex-row absolute right-0 top-0 gap-1">
+                        <form action="{% url 'app:delete-option' o.pk %}?q={{ request.GET.q }}" method="post"
+                              class="p-2 bg-mid mb-0">
+                            {% csrf_token %}
+                            <button type="submit" value="DELETE">Del</button>
+                        </form>
+                        <a href="{% url 'app:survey-builder' %}?q={{ request.GET.q }}"
+                           class="p-2 bg-mid">X</a>
+                    </div>
+                    <form action="{% url 'app:update-option-text' o.pk %}?q={{ request.GET.q }}"
+                          method="post" class="flex flex-col items-center mt-10 mb-0">
+                        {% csrf_token %}
+                        <input type="text" class="input input-bordered w-min" value="{{ o.text }}"
+                               name="text">
+                        <input type="submit" value="Save" class="mt-2 input input-bordered w-min">
+                    </form>
+                {% else %}
+                    <a href="?q={{ request.GET.q }}&editoption={{ o.pk }}"
+                       class="absolute right-0 top-0 p-2 bg-mid hidden group-hover:block">Edit</a>
+                    <div class="text-md">{{ o }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="flex flex-row justify-center grow">
+            {% if o.follow_up_block %}
+                <div class="flex flex-col items-center">
+                    <div class="bg-mid w-px h-4"></div>
+                    <form action="{% url 'app:update-option-follow-up' o.pk %}?q={{ request.GET.q }}"
+                          method="post"
+                          class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" value="" name="follow_up_block"
+                                class="border border-mid p-2 rounded-lg text-sm hover:bg-lightest">-
+                        </button>
+                    </form>
+                    <div class="bg-mid w-px h-4"></div>
+                    <div class="border border-mid py-2 px-4 rounded-md text-sm"
+                         id="startLine-option-{{ o.pk }}"><a
+                            href="{% url 'app:survey-builder' %}?q={{ request.GET.q|remove_option_parent_from_open_questions:o.pk }},{{ o.follow_up_block.pk }}">{{ o.follow_up_block.title }}</a>
+                    </div>
+                </div>
+            {% else %}
+                {% if request.GET.add_follow_up_to_block == o.block.pk|slugify and request.GET.add_follow_up_to_option == o.pk|slugify %}
+                    <div class="flex flex-col items-center">
+                        <div class="bg-mid w-px h-4"></div>
+                        <a href="?q={{ request.GET.q|remove_option_parent_from_open_questions:o.pk }}&add_follow_up_to_block={{ o.block.pk }}&add_follow_up_to_option={{ o.pk }}"
+                           class="border border-mid p-2 rounded-lg text-sm">+</a>
+                        <div class="mt-8" id="startLine-option-{{ o.pk }}"></div>
+                    </div>
+                {% else %}
+                    <div class="flex flex-col items-center">
+                        <div class="bg-mid w-px h-4"></div>
+                        <a href="?q={{ request.GET.q|remove_option_parent_from_open_questions:o.pk }}&add_follow_up_to_block={{ o.block.pk }}&add_follow_up_to_option={{ o.pk }}"
+                           class="border border-mid p-2 rounded-lg text-sm hover:bg-lightest">+</a>
+                        <div class="bg-mid w-px h-4"></div>
+                        <a href="{% url 'app:survey-builder' %}?q={{ o.block.survey.end_block.pk }}" class="border border-mid py-2 px-4 rounded-md text-sm hover:bg-lightest">End of survey</a>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}

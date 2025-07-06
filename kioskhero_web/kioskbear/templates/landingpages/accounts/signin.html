@@ -1,0 +1,32 @@
+{% extends 'landingpages/accounts/base_landingpages_accounts.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="flex h-full relative z-0">
+        <div class="flex flex-1 flex-col justify-between">
+            <div class="mx-auto w-full min-w-min max-w-lg text-left mt-56">
+                <div class="py-8 text-7xl font-bold">Welcome back</div>
+                <form action="." method="post">{% csrf_token %}
+                    {{ form.errors }}
+                    <label class="my-6 block">
+                        <span class="mb-2 block text-gray-700">E-mail</span>
+                        {{ form.username }}
+                    </label>
+
+                    <label class="my-6 block">
+                        <span class="mb-2 block text-gray-700">Password</span>
+                        {{ form.password }}
+                    </label>
+
+                    <input type="submit" value="Sign in"
+                           class="rounded-lg text-center bg-dark text-lightest hover:bg-darkest hover:cursor-pointer p-4">
+                </form>
+            </div>
+            <div class="mx-auto w-full min-w-min max-w-lg py-8 text-left">
+                Forgott your sign in details? <a href="{% url 'accounts:password-reset' %}" class="font-bold">Recover password</a>
+            </div>
+        </div>
+
+        <div class="flex w-full flex-1 bg-brand"></div>
+    </div>
+{% endblock %}

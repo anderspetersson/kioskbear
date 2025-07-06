@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#svg-gradient {
+  height: 0;
+  position: absolute;
+  width: 0;
+}
+
+.ct-chart svg  {
+  margin:1px;
+  vertical-align:text-bottom;
+}
+
+.ct-series-a .ct-line {
+  stroke: #0923f3;
+  stroke-width: 3px;
+  fill: transparent;
+}
+
+.ct-series-a .ct-point {
+  stroke: none;
+}
+
+.ct-circle{
+  fill: none;
+}
+
+.ct-area {
+  fill: url(#gradient) !important;
+}
+
+.ct-label.ct-vertical.ct-start{
+    justify-content: flex-start;
+}
+
+.ct-series-a .ct-area{
+  fill: #0923f3;
+  fill-opacity: 0.5;
+}
+
+.ct-chart-bar {
+  overflow: visible;
+  margin : 0 0 30px 0;
+  color: #0923f3;
+}
+
+.ct-vertical ~ .ct-vertical {
+    stroke: none;
+}
+.ct-horizontal ~ .ct-horizontal {
+    stroke: none;
+}
+
+.ct-label.ct-horizontal.ct-end {
+  position: relative;
+  justify-content: flex-end;
+  text-align: right;
+  transform-origin: 100% 0;
+  transform: translate(-100%) rotate(-45deg);
+  white-space:nowrap;
+}

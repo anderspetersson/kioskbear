@@ -1,0 +1,71 @@
+{% load survey_tags %}
+<div class="w-full rounded-md border p-8 mb-4 border-mid bg-white relative">
+    <div class="mt-8 mb-12 text-center group">
+        <div class="flex flex-row w-full gap-4 items-top">
+            {% render_block_title block %}
+        </div>
+        {% if request.GET.edit == block.pk|slugify %}
+            <div class="flex flex row gap-4">
+                <div class="text-center max-w-xs">
+                    <a href="?q={{ request.GET.q }}&edit={{ request.GET.edit }}&addchoicebutton=true" class="btn border bg-white border-mid w-full max-w-xs mt-4">Add
+                        Choice Button</a>
+                </div>
+                <div class="text-center max-w-xs">
+                    <a href="#" class="btn border bg-white border-mid w-full max-w-xs mt-4">Add Form</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <div class="flex flex-row justify-between gap-8 mt-8">
+        {% render_block_options block %}
+        {% if request.GET.addchoicebutton and request.GET.edit == block.pk|slugify %}
+            <form action="{% url 'app:create-option' %}?q={{ request.GET.q }}&edit={{ request.GET.edit }}"
+                  method="post" class="flex flex-col w-full gap-4 items-center">
+                {% csrf_token %}
+                <textarea id="create-option" name="text"
+                          class="textarea textarea-bordered textarea-sm"></textarea>
+                <script>
+                    input = document.getElementById('create-option');
+                    input.focus(); //sets focus to element
+                    var val = this.input.value; //store the value of the element
+                    this.input.value = ''; //clear the value of the element
+                    this.input.value = val; //set that value back.
+                </script>
+                <div class="flex flex-row gap-1">
+                    <input type="submit" class="btn border bg-white border-mid w-full max-w-xs mt-4" value="Save">
+                </div>
+            </form>
+        {% endif %}
+    </div>
+</div>
+
+{% if request.GET.add_follow_up_to_block == block.pk|slugify %}
+    <div class="flex flex-row w-full mt-16 p-8 justify-center gap-8" id="endLine-choose-new-or-existing">
+        <a href="?q={{ request.GET.q }}&add_follow_up_to_block={{ request.GET.add_follow_up_to_block }}&add_follow_up_to_option={{ request.GET.add_follow_up_to_option }}&existing=true"
+           class="btn bg-white border w-60 {% if request.GET.existing %}border-dark{% endif %}">Existing
+            Block</a>
+        <a href="?q={{ request.GET.q }}&add_follow_up_to_block={{ request.GET.add_follow_up_to_block }}&add_follow_up_to_option={{ request.GET.add_follow_up_to_option }}&new=true"
+           class="btn bg-white border w-60 {% if request.GET.new %}border-dark{% endif %}">New Block</a>
+    </div>
+    {% if request.GET.existing %}
+        <form method="post"
+              action="{% url 'app:update-option-follow-up' request.GET.add_follow_up_to_option %}?q={{ request.GET.q }}">
+            {% csrf_token %}
+            <select name="follow_up_block" class="select select-bordered w-full max-w-xs">
+                {% for b in survey.block_set.all %}
+                    {% if not b in open_blocks %}
+                        <option value="{{ b.pk }}">{{ b.title }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <input type="submit" value="Save" class="btn border border-mid bg-white w-full max-w-xs mt-4">
+        </form>
+    {% elif request.GET.new %}
+        <form method="post"
+              action="{% url 'app:create-block' %}?q={{ request.GET.q }}&parenttype=option&parentid={{ request.GET.add_follow_up_to_option }}">
+            {% csrf_token %}
+                <textarea name="title" class="textarea textarea-bordered w-full max-w-lg"></textarea>
+                <input type="submit" value="Save" class="btn border bg-white border-mid w-full max-w-xs mt-4">
+        </form>
+    {% endif %}
+{% endif %}

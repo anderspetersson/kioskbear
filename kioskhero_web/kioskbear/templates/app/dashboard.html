@@ -1,0 +1,143 @@
+{% extends 'app/base_app.html' %}
+
+{% block extrajs %}
+    <script type="text/javascript">
+        new Chartist.LineChart(
+            '#chart',
+            {
+                labels: [{% for d in daily_ratings_30d reversed %}'{{ d.created_date|date:"m/d" }}', {% endfor %}],
+                series: [[{% for d in daily_ratings_30d reversed %}{% if d.count %}{{ d.avg_score }}{% else %}null{% endif %}, {% endfor %}],],
+            },
+            {
+                showArea: true,
+                fullWidth: true,
+                chartPadding: {
+                    right: 12,
+                    left: 0,
+                },
+                high: 5,
+                low: 0,
+            }
+        );
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="w-full rounded-md border p-8 border-mid bg-white">
+        <div class="flex flex-row items-center justify-between">
+            <div>
+                <div>Rating today</div>
+                <div class="text-2xl font-bold ">
+                    {% if avg_today.score__avg %}
+                        {{ avg_today.score__avg|floatformat:2 }}
+                        <div class="inline-block text-sm align-text-top {% if change_today.0 == 'down' %}text-red{% elif change_today.0 == 'up' %}text-green{% endif %}">
+                            {% if change_today.0 == 'down' %}-{% elif change_today.0 == 'up' %}
+                                +{% endif %}{{ change_today.1|floatformat:2 }}%
+                        </div>
+                    {% else %}
+                        -
+                    {% endif %}
+                </div>
+            </div>
+            <div>
+                <div>Rating yesterday</div>
+                <div class="text-2xl font-bold ">
+                    {% if avg_yesterday.score__avg %}
+                        {{ avg_yesterday.score__avg|floatformat:2 }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="text-center">
+                <div>Rating last 7 days</div>
+                <div class="text-2xl font-bold">
+                    {% if avg_7d.score__avg %}
+                        {{ avg_7d.score__avg|floatformat:2 }}
+                        <div class="inline-block text-sm align-text-top {% if change_7d.0 == 'down' %}text-red{% elif change_7d.0 == 'up' %}text-green{% endif %}">
+                            {% if change_7d.0 == 'down' %}-{% elif change_7d.0 == 'up' %}+{% endif %}
+                            {% if change_7d.0 != 'inf' %}{{ change_7d.1|floatformat:2 }}%{% endif %}</div>
+                    {% else %}
+                        -
+                    {% endif %}
+                </div>
+            </div>
+            <div class="text-right">
+                <div>Rating last 30 days</div>
+                <div class="text-2xl font-bold">
+                    {% if avg_30d.score__avg %}
+                        {{ avg_30d.score__avg|floatformat:2 }}
+                        <div class="inline-block text-sm align-text-top {% if change_30d.0 == 'down' %}text-red{% elif change_30d.0 == 'up' %}text-green{% endif %}">
+                            {% if change_30d.0 == 'down' %}-{% elif change_30d.0 == 'up' %}+{% endif %}
+                            {% if change_30d.0 != 'inf' %}{{ change_30d.1|floatformat:2 }}%{% endif %}</div>
+                    {% else %}
+                        -
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <svg id="svg-gradient">
+        <defs>
+            <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#0923f3" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#0923f3" stop-opacity="0"/>
+            </linearGradient>
+        </defs>
+    </svg>
+    <div class="w-full rounded-md border p-8 border-mid bg-white mt-4">
+        <div class="mt-8 max-w-full" style="height:200px;width:100%">
+            <div id="chart"></div>
+        </div>
+    </div>
+    <div class="flex flex-row gap-4 w-full">
+        <div class="w-full rounded-md border p-8 border-mid bg-white mt-4">
+            <div class="flex-1 -mx-4">
+                <table class="table-auto w-full">
+                    <thead>
+                    <tr class="text-left">
+                    <th class="p-2 px-4">Time</th>
+                    <th class="p-2 px-4">Rating</th>
+                    </tr>
+                    </thead>
+
+                {% for r in latest_ratings %}
+                    <tr class="hover:bg-lightest">
+                        <td class="p-2 px-4">{{ r.created_datetime|timesince }} ago</td>
+                        <td class="p-2 px-4">{{ r.score }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="w-full rounded-md border p-8 border-mid bg-white mt-4">
+            <div class="flex-1 -mx-4">
+                <table class="table-auto w-full">
+                    <thead>
+                        <tr class="text-left">
+                            <th class="p-2 px-4">Date</th>
+                            <th class="p-2 px-4">Ratings</th>
+                            <th class="p-2 px-4">Avg rating</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                {% for d in daily_ratings_10d %}
+                    <tr class="hover:bg-lightest">
+                        <td class="text-left p-2 px-4">{{ d.created_date|date:"Y-m-d" }}</td>
+                        <td class="p-2 px-4">{{ d.count }}</td>
+                        <td class="p-2 px-4">
+                            {% if d.avg_score == '-' %}
+                                -
+                            {% else %}
+                                {{ d.avg_score|floatformat:2 }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% load survey_tags %}
+<div class="w-full rounded-md border p-8 mb-4 border-mid bg-white relative">
+    <div class="mt-8 mb-12 text-center group">
+        <div class="flex flex-row w-full gap-4 items-top">
+            {% render_block_title block %}
+        </div>
+            <div class="flex flex row gap-4 justify-center mt-8">
+                <div class="max-w-xs w-60">
+                    <a href="?q={{ request.GET.q }}&edit={{ request.GET.edit }}&addchoicebutton=true" class="btn border bg-white border-mid w-full max-w-xs mt-4">Add
+                        Choice Button</a>
+                </div>
+                <div class="max-w-xs w-60">
+                    <a href="?q={{ request.GET.q }}&edit={{ request.GET.edit }}&addchoicebutton=true" class="btn border bg-white border-mid w-full max-w-xs mt-4">Add
+                        form</a>
+                </div>
+            </div>
+    </div>
+    <div class="flex flex-row justify-between gap-8 mt-8">
+        {% render_block_options block %}
+        {% if request.GET.addchoicebutton %}
+            <form action="{% url 'app:create-option' %}?q={{ request.GET.q }}&edit={{ block.pk }}"
+                  method="post" class="flex flex-col w-full gap-4 items-center">
+                {% csrf_token %}
+                <textarea id="create-option" name="text"
+                          class="textarea textarea-bordered textarea-sm"></textarea>
+                <script>
+                    input = document.getElementById('create-option');
+                    input.focus(); //sets focus to element
+                    var val = this.input.value; //store the value of the element
+                    this.input.value = ''; //clear the value of the element
+                    this.input.value = val; //set that value back.
+                </script>
+                <div class="flex flex-row gap-1">
+                    <input type="submit" class="btn border bg-white border-mid w-full max-w-xs mt-4" value="Save">
+                </div>
+            </form>
+        {% endif %}
+    </div>
+</div>

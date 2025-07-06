@@ -1,0 +1,6 @@
+**/__pycache__/
+.idea/
+node_modules
+kioskbear/static/dist
+kioskbear.egg-info
+kioskhero.egg-info

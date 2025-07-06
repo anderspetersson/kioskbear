@@ -1,0 +1,64 @@
+{% for o in survey.start_block.scored_options.all %}
+    <div class="w-full flex flex-col text-center">
+        <div>
+            <div class="p-8 border border-mid rounded-md relative group">
+                {% if request.GET.editleadoptions == o.pk|slugify %}
+                    <a href="{% url 'app:survey-builder' %}" class="absolute right-0 top-0 p-2 bg-mid">X</a>
+                    <div class="text-sm mb-2">{{ o.score }}</div>
+                    <form action="{% url 'app:update-scored-option-text' o.pk %}" method="post"
+                          class="flex flex-col items-center mb-0">
+                        {% csrf_token %}
+                        <select name="text" class="select select-bordered">
+                            <option value="🤬" {% if o.text == '🤬' %}selected{% endif %}>🤬</option>
+                            <option value="🤨" {% if o.text == '🤨' %}selected{% endif %}>🤨</option>
+                            <option value="🙂" {% if o.text == '🙂' %}selected{% endif %}>🙂</option>
+                            <option value="😀" {% if o.text == '😀' %}selected{% endif %}>😀</option>
+                            <option value="😍" {% if o.text == '😍' %}selected{% endif %}>😍</option>
+                        </select>
+                        <input type="submit" value="Save" class="mt-2 input input-bordered w-min">
+                    </form>
+                {% else %}
+                    <a href="?editleadoptions={{ o.pk }}"
+                       class="absolute right-0 top-0 p-2 bg-mid hidden group-hover:block">Edit</a>
+                    <div class="text-sm mb-2">{{ o.score }}</div>
+                    <div class="text-4xl">{{ o }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="flex flex-row justify-center">
+            {% if o.follow_up_block %}
+                <div class="flex flex-col items-center">
+                    <div class="bg-mid w-px h-4"></div>
+                    <form action="{% url 'app:update-scored-option-follow-up' o.pk %}" method="post"
+                          class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" value="" name="follow_up_block"
+                                class="border border-mid p-2 rounded-lg text-sm hover:bg-lightest">-
+                        </button>
+                    </form>
+                    <div class="bg-mid w-px h-4"></div>
+                    <a href="{% url 'app:survey-builder' %}?q={{ o.follow_up_block.pk }}"
+                       class="border border-mid py-2 px-4 rounded-md text-sm hover:bg-lightest"
+                       id="startLine-scored-option-{{ o.pk }}">{{ o.follow_up_block.title }}</a>
+                </div>
+            {% else %}
+                {% if request.GET.add_follow_up_to_block == o.block.pk|slugify and request.GET.add_follow_up_to_scored_option == o.pk|slugify %}
+                    <div class="flex flex-col items-center">
+                        <div class="bg-mid w-px h-4"></div>
+                        <a href="?add_follow_up={{ o.pk }}"
+                           class="border border-mid p-2 rounded-lg text-sm">+</a>
+                        <div class="mt-8" id="startLine-scored-option-{{ o.pk }}"></div>
+                    </div>
+                {% else %}
+                    <div class="flex flex-col items-center">
+                        <div class="bg-mid w-px h-4"></div>
+                        <a href="?add_follow_up_to_block={{ o.block.pk }}&add_follow_up_to_scored_option={{ o.pk }}"
+                           class="border border-mid p-2 rounded-lg text-sm hover:bg-lightest">+</a>
+                        <div class="bg-mid w-px h-4"></div>
+                        <a href="{% url 'app:survey-builder' %}?q={{ o.block.survey.end_block.pk }}" class="border border-mid py-2 px-4 rounded-md text-sm hover:bg-lightest">End of survey</a>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,57 @@
+{% extends 'app/base_app.html' %}
+{% load static survey_tags %}
+{% block content %}
+    {% for block in open_blocks %}
+        {% render_block id=block.id %}
+    {% endfor %}
+{% endblock %}
+{% block extrajs %}
+    <script src="{% static 'leader-line/leader-line.min.js' %}"></script>
+    <script type="text/javascript">
+        {% for b in open_blocks %}
+            {% for o in b.options.all %}
+                {% if o.follow_up_block in open_blocks %}
+                    new LeaderLine(
+                        document.getElementById('startLine-option-{{ o.pk }}'),
+                        document.getElementById('endLine-{{ o.follow_up_block.pk }}'), {
+                            startSocket: 'bottom', endSocket: 'top'
+                        }
+                    );
+                {% endif %}
+            {% endfor %}
+            {% for o in b.scored_options.all %}
+                {% if o.follow_up_block in open_blocks %}
+                    new LeaderLine(
+                        document.getElementById('startLine-scored-option-{{ o.pk }}'),
+                        document.getElementById('endLine-{{ o.follow_up_block.pk }}'), {
+                            startSocket: 'bottom', endSocket: 'top'
+                        }
+                    );
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        {% if request.GET.add_follow_up_to_option %}
+            new LeaderLine(
+                document.getElementById('startLine-option-{{ request.GET.add_follow_up_to_option }}'),
+                document.getElementById('endLine-choose-new-or-existing'), {
+                    startSocket: 'bottom', endSocket: 'top'
+                }
+            );
+        {% elif request.GET.add_follow_up_to_scored_option %}
+            new LeaderLine(
+                document.getElementById('startLine-scored-option-{{ request.GET.add_follow_up_to_scored_option }}'),
+                document.getElementById('endLine-choose-new-or-existing'), {
+                    startSocket: 'bottom', endSocket: 'top'
+                }
+            );
+        {% endif %}
+        let body = document.querySelector("body");
+        let topPos = localStorage.getItem("body-scroll");
+        if (topPos !== null) {
+          body.scrollTop = parseInt(topPos, 10);
+        }
+        window.addEventListener("beforeunload", () => {
+          localStorage.setItem("body-scroll", body.scrollTop);
+        });
+    </script>
+{% endblock %}

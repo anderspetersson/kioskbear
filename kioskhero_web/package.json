@@ -1,0 +1,15 @@
+{
+  "main": "kioskbear/static/src/js/app.js",
+  "scripts": {
+    "dev": "npx tailwindcss -i kioskbear/static/src/css/app.css -o kioskbear/static/dist/css/app.css --watch",
+    "build": "npx tailwindcss -i kioskbear/static/src/css/app.css -o kioskbear/static/dist/css/app.css --minify"
+  },
+  "devDependencies": {
+    "daisyui": "^3.5.0",
+    "tailwindcss": "^3.3.3"
+  },
+  "dependencies": {
+    "chartist": "^1.3.0",
+    "leader-line": "^1.0.7"
+  }
+}

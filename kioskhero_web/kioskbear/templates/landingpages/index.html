@@ -1,0 +1,145 @@
+{% extends 'landingpages/base_landingpages.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="flex justify-center">
+        <div class="flex max-w-screen-2xl p-8 py-4 flex-row justify-between items-center w-full">
+            <div class="mt-24 flex flex-col justify-between">
+                <div class="py-4 text-left text-7xl font-bold">
+                    <h1 class="max-w-2xl">Collect customer feedback at your retail location</h1>
+                </div>
+                <div class="mt-8 max-w-xl text-left text-2xl">
+                    Perfect for retail stores, resturants, cafes, coffee shops, spas or salons.
+                </div>
+                <div class="mt-12 mb-24 w-fit text-left">
+                    <a href="{% url 'accounts:signup' %}"
+                       class="rounded-lg text-center bg-dark text-lightest hover:bg-darkest p-4">Start listening to your
+                        customers</a>
+                </div>
+            </div>
+            <div class="text-right">
+                <img src="{% static 'img/hero.jpg' %}" class="max-w-sm">
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-center bg-brand">
+        <div class="flex max-w-screen-2xl p-8 py-4 flex-col justify-center items-center">
+            <div class="flex gap-24 py-24 bg-brand">
+                <div class="flex flex-1 flex-col">
+                    <div class="text-center text-2xl mb-8 font-bold">Build your feedback survey</div>
+                    <div class="mockup-browser border bg-base-300">
+                        <div class="mockup-browser-toolbar"></div>
+                        <div class="flex justify-center p-4 bg-base-200"><img
+                                src="{% static 'img/feature-survey-builder.png' %}" width="100%"></div>
+                    </div>
+                </div>
+                <div class="flex flex-1 flex-col">
+                    <div class="max-w-lg flex-1 text-center">
+                        <div class="text-center text-2xl mb-8 font-bold">Run the Kioskbear app on your iPad</div>
+                        <img src="{% static 'img/app_screenshot.png' %}" width="100%"
+                             class="max-w-xl" alt="Kioskbear Ipad screenshot">
+                    </div>
+                </div>
+                <div class="flex flex-1 flex-col">
+                    <div class="text-center text-2xl mb-8 font-bold">Get answers you can act on</div>
+                    <img src="{% static 'img/app_screenshot.png' %}" width="100%"
+                         class="max-w-xl" alt="Kioskbear Ipad screenshot">
+                </div>
+            </div>
+        </div>
+    </div>
+
+        {% comment %}
+        <div class="flex justify-center py-4">
+            <div class="flex justify-between py-8">
+                <div class="max-w-xl flex-1 text-2xl">
+                    Works offline
+                </div>
+                <div class="max-w-xl flex-1 text-right">
+                    Got shady connection to the internet? [NAME] automatically syncs your feedback when it gets connection
+                    after
+                    losing it.
+                </div>
+            </div>
+
+
+            <div class="flex justify-between py-8">
+                <div class="max-w-xl flex-1 text-2xl">
+                    Automatic analytics and reports
+                </div>
+                <div class="max-w-xl flex-1 text-right">
+                    What to see how you are improving? [NAME] gives you live analytics and monthly reports over collected
+                    feedback.
+                </div>
+            </div>
+        </div>
+        {% endcomment %}
+    <div class="flex justify-center py-4">
+
+        <div class="flex max-w-screen-2xl justify-center gap-24 items-center w-full py-24 px-8">
+            <div class="flex-1 text-2xl text-center">
+                <img src="{% static 'img/feature-improve-rating.png' %}" width="100%"
+                     class="p-20 bg-white rounded-md text-center mb-4">
+            </div>
+            <div class="flex-1 text-2xl">
+                <h2 class="font-bold mb-2">Improve your online rating</h2>
+                <p>Send customers that enjoyed their visit to your online rating page, keep the not so flattering feedback private.</p><p class="mt-8">The result is improved online rating.</p>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-center py-4">
+        <div class="flex max-w-screen-2xl justify-center gap-24 items-center w-full py-24 px-8">
+            <div class="flex-1 text-2xl">
+                <img src="{% static 'img/feature-remote-config.png' %}" width="100%" class="p-20 bg-white rounded-md text-center mb-4">
+            </div>
+            <div class="flex-1 text-2xl">
+                <h2 class="font-bold mb-2">Configure remotely</h2>
+                <p>There’s no need for physical access to the iPad your survey will appear on.</p><p class="mt-8">Design your surveys in our webapp and deploy it to a device or group of devices, remotely.</p>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-center py-4">
+        <div class="flex max-w-screen-2xl justify-center gap-24 items-center w-full py-24 px-8">
+            <div class="flex-1 text-2xl">
+                <img src="{% static 'img/feature-timeout.png' %}" width="100%" class="p-20 bg-white rounded-md text-center mb-4">
+
+            </div>
+            <div class="flex-1 text-2xl">
+                <h2 class="font-bold mb-2">Survey reset timeout</h2>
+                <span>The feedback survey automatically resets back to the first question when a visitor leaves your survey incomlete.</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-center py-4">
+        <div class="flex max-w-screen-2xl justify-center gap-24 items-center w-full py-24 px-8">
+            <div class="flex-1 text-2xl">
+                <img src="{% static 'img/feature-device-lock.png' %}" width="100%" class="p-20 bg-white rounded-md text-center mb-4">
+
+            </div>
+            <div class="flex-1 text-2xl">
+                <h2 class="font-bold mb-2">Lock down your device</h2>
+                <span>Prevent visitors from using other applications on your iPad.</span>
+            </div>
+        </div>
+    </div>
+        {% comment %}
+        <div class="flex justify-center py-4">
+            <div class="flex justify-between py-8">
+                <div class="max-w-xl flex-1 text-2xl">
+                    Multiple stores
+                </div>
+                <div class="max-w-xl flex-1 text-right">
+                    Got stores on multiple locations? We got you covered.
+                </div>
+            </div>
+            <div class="flex justify-between py-8">
+                <div class="max-w-xl flex-1 text-2xl">
+                    Customizeable
+                </div>
+                <div class="max-w-xl flex-1 text-right">
+                    Use the emojis you prefer or switch to use your brand colors.
+                </div>
+            </div>
+        </div>
+        {% endcomment %}
+{% endblock %}

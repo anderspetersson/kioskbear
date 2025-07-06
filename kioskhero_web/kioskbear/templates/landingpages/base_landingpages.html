@@ -1,0 +1,51 @@
+{% load static %}
+<html lang="en">
+<head>
+    <title>Kioskbear</title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'dist/css/app.css' %}">
+</head>
+<body class="bg-lightest">
+<div class="flex w-full justify-center">
+    <div class="flex max-w-screen-2xl p-8 py-8 flex-row w-full">
+    {% block menu %}
+        <div class="flex-1">
+            <div class="flex items-center h-full">
+                <div class="text-2xl font-bold me-6"><a href="{% url 'landingpages:index' %}">Kioskbear</a></div>
+                <div class="">Pricing</div>
+            </div>
+        </div>
+        <div class="flex-1">
+            <div class="flex justify-end">
+                <a href="{% url 'accounts:signin' %}" class="mx-2 p-4 py-2">Sign in</a>
+                <a href="{% url 'accounts:signup' %}" class="rounded-lg p-4 py-2 bg-dark text-lightest hover:bg-darkest">Get started</a>
+            </div>
+        </div>
+    {% endblock %}
+    </div>
+</div>
+<div class="w-full justify-center">
+        {% block content %}{% endblock %}
+</div>
+<div class="flex w-full justify-center bg-base-300 ">
+    <div class="flex max-w-screen-2xl p-8 py-4 flex-col w-full">
+<footer class="footer py-10 text-base-content">
+  <div>
+    <span class="footer-title">Product</span>
+    <a class="link link-hover">Pricing</a>
+      <a class="link link-hover" href="#">Help center</a>
+  </div>
+  <div>
+    <span class="footer-title">Company</span>
+    <a class="link link-hover">About us</a>
+    <a class="link link-hover">Contact</a>
+  </div>
+</footer>
+    </div>
+</div>
+
+</body>
+</html>

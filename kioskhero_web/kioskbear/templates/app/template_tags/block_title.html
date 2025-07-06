@@ -1,0 +1,30 @@
+{% if request.GET.edit == block.pk|slugify %}
+<div class="flex flex-col w-full items-center gap-4">
+    <form action="{% url 'app:update-block-title' block.pk %}?q={{ request.GET.q }}"
+          method="post" class="flex flex-row w-full gap-4 items-center">
+        {% csrf_token %}
+        <textarea id="lead_scored_feedback_question_title" name="title"
+                  class="textarea textarea-bordered textarea-lg grow">{{ block.title }}</textarea>
+        <script>
+            input = document.getElementById('lead_scored_feedback_question_title');
+            input.focus(); //sets focus to element
+            var val = this.input.value; //store the value of the element
+            this.input.value = ''; //clear the value of the element
+            this.input.value = val; //set that value back.
+        </script>
+        <div class="flex flex-row gap-1">
+            <input type="submit" class="btn border bg-white border-mid w-full max-w-xs mt-4" value="Save">
+        </div>
+    </form>
+</div>
+{% else %}
+    <span id="endLine-{{ block.pk }}"
+          class="text-2xl pt-4 grow">{{ block.title|linebreaksbr }}</span>
+    <div class="flex flex-row gap-1 h-min absolute right-8 hidden group-hover:block">
+        <a href="?q={{ request.GET.q }}&edit={{ block.pk }}"
+           class="bg-mid p-2 rounded-sm">Edit</a>
+        {% if allow_delete_block %}
+            <a href="" class="bg-mid p-2 rounded-sm">Del</a>
+        {% endif %}
+    </div>
+{% endif %}
