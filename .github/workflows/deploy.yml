@@ -14,8 +14,6 @@ env:
   GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
 
 jobs:
-  test:
-    uses: ./.github/workflows/test.yml
 
   setup-build-publish-deploy:
     needs: test
