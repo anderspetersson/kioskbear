@@ -1,0 +1,26 @@
+[project]
+dependencies = [
+    "django==6.0.4",
+    "djangorestframework==3.17.1",
+    "markdown==3.10.2",
+    "django-filter==25.2",
+    "whitenoise==6.12.0",
+    "gunicorn==25.3.0",
+    "psycopg-binary>=3.3.3",
+    "psycopg-pool>=3.3.0",
+    "psycopg>=3.3.3",
+    "sentry-sdk==2.58.0",
+    "django-ninja>=1.6.2",
+]
+name = "kioskhero"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+
+[tool.setuptools]
+py-modules = ["kioskbear"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
