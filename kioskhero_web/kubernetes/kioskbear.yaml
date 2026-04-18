@@ -16,60 +16,13 @@ spec:
       labels:
         app: kioskbear
     spec:
-      affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            preference:
-              matchExpressions:
-                - key: cloud.google.com/gke-spot
-                  operator: In
-                  values:
-                    - "true"
-      volumes:
-        - name: nginx
-          configMap:
-            name: nginx
       containers:
-        - name: nginx
-          image: eu.gcr.io/roiiogcloud/nginx:latest
-          imagePullPolicy: Always
-          volumeMounts:
-            - name: nginx
-              mountPath: /etc/nginx/
-          ports:
-            - containerPort: 8400
-          resources:
-            requests:
-              cpu: "50m"
-              memory: "32Mi"
-            limits:
-              cpu: "50m"
-              memory: "64Mi"
-          lifecycle:
-            preStop:
-              exec:
-                command: [
-                    "sh",
-                    "-c",
-                    # Introduce a delay to the shutdown sequence to wait for the
-                    # pod eviction event to propagate. Then, gracefully shutdown
-                    # nginx.
-                    "sleep 15 && /usr/sbin/nginx -s quit",
-                  ]
-          startupProbe:
-            initialDelaySeconds: 15
-            periodSeconds: 15
-            exec:
-              command:
-              - cat
-              - /etc/nginx/nginx.conf
         - name: django
           image: europe-west1-docker.pkg.dev/roiiogcloud/kioskbear/kioskbear:latest
           imagePullPolicy: Always
           ports:
             - name: gunicorn
-              containerPort: 8401
+              containerPort: 8200
           resources:
             requests:
               cpu: "300m"
@@ -93,7 +46,7 @@ spec:
             - name: DJANGO_SETTINGS_MODULE
               value: "kioskbear.conf.settings.production"
             - name: GUNICORN_CMD_ARGS
-              value: "--bind=:8401 --workers=1 --threads 5 --keep-alive 65 --max-requests=100000 --timeout=120 --error-logfile=/app/error.log --worker-tmp-dir=/dev/shm --preload"
+              value: "--bind=:8200 --workers=1 --threads 5 --keep-alive 65 --max-requests=100000 --timeout=120 --error-logfile=/app/error.log --worker-tmp-dir=/dev/shm --preload"
             - name: PYTHONIOENCODING
               value: "UTF-8"
       terminationGracePeriodSeconds: 60
@@ -101,36 +54,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    cloud.google.com/neg: '{"ingress": true}'
   labels:
     app: kioskbear
   name: kioskbear
 spec:
   type: ClusterIP
   ports:
-    - port: 8400
-      targetPort: 8400
-      protocol: TCP
+    - protocol: TCP
+      port: 8200
+      targetPort: 8200
       name: kioskbear
   selector:
     app: kioskbear
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: kioskbear
-spec:
-  maxReplicas: 150
-  minReplicas: 1
-  metrics:
-    - resource:
-        name: cpu
-        target:
-          averageUtilization: 60
-          type: Utilization
-      type: Resource
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: kioskbear

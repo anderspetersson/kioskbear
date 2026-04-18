@@ -1,0 +1,14 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: kioskbear-www
+spec:
+  parentRefs:
+    - kind: Gateway
+      name: traefik-gateway
+  hostnames:
+    - "*.kioskbear.com"
+  rules:
+    - backendRefs:
+        - name: kioskbear
+          port: 8400
