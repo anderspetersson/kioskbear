@@ -1,21 +1,23 @@
 import os
-from .base import *
+
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
+from .base import *
+
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kioskbear',
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': os.environ.get('POSTGRES_SERVICE_HOST'),
-        'PORT': os.environ.get('POSTGRES_SERVICE_PORT'),
-        'CONN_MAX_AGE': 600
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "kioskbear",
+        "USER": os.environ.get("DATABASE_USER"),
+        "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_SERVICE_HOST"),
+        "PORT": os.environ.get("POSTGRES_SERVICE_PORT"),
+        "CONN_MAX_AGE": 600,
     }
 }
 
@@ -35,3 +37,5 @@ sentry_sdk.init(
     # We recommend adjusting this value in production,
     profiles_sample_rate=0.1,
 )
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
