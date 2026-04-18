@@ -1,4 +1,6 @@
-FROM eu.gcr.io/roiiogcloud/python:latest
+FROM python:3.14-slim-trixie AS buildcontainer
+
+ARG DEBIAN_FRONTEND=noninteractiv
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     optipng \
@@ -8,28 +10,61 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libopenjp2-7-dev \
     libjpeg62-turbo-dev \
     zlib1g-dev \
+    libcairo2-dev \
+    pkg-config \
+    gcc \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs
-
-# Install requirements.
-# Use no-cache-dir to save disk space since
-# the docker image will be cached anyway.
-ADD requirements.txt /app/requirements.txt
-RUN pip3 install --no-cache-dir -r /app/requirements.txt
+ENV PATH="/app/.venv/bin:$PATH"
 
 WORKDIR /app
 
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+ENV UV_LINK_MODE=copy
+# Install the project's dependencies using the lockfile and settings
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-install-project --no-dev
+
 ADD . /app
-RUN pip3 install -e /app/
-RUN npm install
-RUN npm run build
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev
+
 
 ENV DJANGO_SETTINGS_MODULE=kioskbear.conf.settings.production
 
-RUN django-admin collectstatic --noinput
+ENV UV_NO_DEV=True
+ENV PATH="/app/.venv/bin:$PATH"
+
+RUN --mount=type=secret,id=DJANGO_SECRET_KEY,env=DJANGO_SECRET_KEY \
+    --mount=type=secret,id=MAILGUN_API_KEY,env=MAILGUN_API_KEY \
+    uv run django-admin collectstatic --noinput -i css/app.css
+
+FROM python:3.14-slim-trixie
+
+COPY --from=buildcontainer /app/ /app/
+COPY --from=buildcontainer /usr/bin/optipng /usr/bin/optipng
+COPY --from=buildcontainer /usr/bin/jpegoptim /usr/bin/jpegoptim
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+ARG DEBIAN_FRONTEND=noninteractiv
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    htop \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+ENV PATH="/app/.venv/bin:$PATH"
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev
 
 EXPOSE 8000
 
-CMD ["gunicorn", "kioskbear.conf.wsgi:application"]
+RUN mkdir -p /app/logs/gunicorn
+
+ENTRYPOINT ["gunicorn", "kioskbear.conf.wsgi:application"]
