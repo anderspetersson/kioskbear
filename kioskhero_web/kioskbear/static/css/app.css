@@ -1,6 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --container-center: true;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-red: #b91c1c;
+  --color-green: #15803d;
+  --color-white: #FFFFFF;
+  --color-lightest: #F3F3F5;
+  --color-light: #EAE9E5;
+  --color-mid: #C3CBDD;
+  --color-dark: #75664F;
+  --color-darkest: #514738;
+  --color-brand: #ACC4AE;
+  --font-sans: 'Inter var', sans-serif;
+}
 
 #svg-gradient {
   height: 0;
