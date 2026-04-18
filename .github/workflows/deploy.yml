@@ -14,9 +14,7 @@ env:
   GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
 
 jobs:
-
   setup-build-publish-deploy:
-    needs: test
     name: Setup, Build, Publish
     runs-on: ubuntu-latest
 
