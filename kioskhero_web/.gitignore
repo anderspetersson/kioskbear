@@ -1,6 +1,8 @@
 **/__pycache__/
+.DS_Store
 .idea/
 node_modules
 kioskbear/static/dist
 kioskbear.egg-info
 kioskhero.egg-info
+**/*.sqlite3
