@@ -26,7 +26,7 @@ ENV UV_LINK_MODE=copy
 # Install the project's dependencies using the lockfile and settings
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=kioskhero_web/uv.lock,target=uv.lock \
-    --mount=type=bind,source=kioskhere_web/pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=kioskhero_web/pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-project --no-dev
 
 ADD . /app
