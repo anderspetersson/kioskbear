@@ -67,4 +67,4 @@ EXPOSE 8000
 
 RUN mkdir -p /app/logs/gunicorn
 
-ENTRYPOINT ["gunicorn", "kioskbear.conf.wsgi:application"]
+ENTRYPOINT ["uv", "run", "gunicorn", "kioskbear.conf.wsgi:application"]
