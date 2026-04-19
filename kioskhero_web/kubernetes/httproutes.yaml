@@ -11,7 +11,7 @@ spec:
   rules:
     - backendRefs:
         - name: kioskbear
-          port: 8400
+          port: 8200
 ---
 kind: HTTPRoute
 apiVersion: gateway.networking.k8s.io/v1
@@ -26,4 +26,4 @@ spec:
   rules:
     - backendRefs:
         - name: kioskbear
-          port: 8400
+          port: 8200
