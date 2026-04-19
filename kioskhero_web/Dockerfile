@@ -60,7 +60,7 @@ WORKDIR /app
 
 ENV PATH="/app/.venv/bin:$PATH"
 
-RUN --mount=type=cache,target=/root/.cache/uv \
+RUN --mount=type=cache,target=/app/.venv \
     uv sync --frozen --no-dev --directory=kioskhero_web
 
 EXPOSE 8000
