@@ -32,7 +32,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ADD . /app
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
+    uv sync --frozen --no-dev --directory=kioskhero_web
 
 
 ENV DJANGO_SETTINGS_MODULE=kioskbear.conf.settings.production
@@ -42,7 +42,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 RUN --mount=type=secret,id=DJANGO_SECRET_KEY,env=DJANGO_SECRET_KEY \
     --mount=type=secret,id=MAILGUN_API_KEY,env=MAILGUN_API_KEY \
-    uv run django-admin collectstatic --noinput -i css/app.css
+    uv run --directory=kioskhero_web django-admin collectstatic --noinput -i css/app.css
 
 FROM python:3.14-slim-trixie
 
@@ -61,7 +61,7 @@ WORKDIR /app
 ENV PATH="/app/.venv/bin:$PATH"
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
+    uv sync --frozen --no-dev --directory=kioskhero_web
 
 EXPOSE 8000
 
