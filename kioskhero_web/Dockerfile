@@ -18,13 +18,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV PATH="/app/.venv/bin:$PATH"
 
-WORKDIR /app
-
 RUN useradd notroot
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 ADD . /app
+
+WORKDIR /app/kioskhero_web
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --no-dev --directory=kioskhero_web
@@ -35,10 +35,10 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 RUN --mount=type=secret,id=DJANGO_SECRET_KEY,env=DJANGO_SECRET_KEY \
     --mount=type=secret,id=MAILGUN_API_KEY,env=MAILGUN_API_KEY \
-    uv run --directory=kioskhero_web django-admin collectstatic --noinput -i css/app.css
+    uv run django-admin collectstatic --noinput -i css/app.css
 
 RUN --mount=type=cache,target=/app/.venv \
-    uv sync --no-dev --directory=kioskhero_web
+    uv sync --no-dev
 
 RUN mkdir -p /app/logs/gunicorn
 
