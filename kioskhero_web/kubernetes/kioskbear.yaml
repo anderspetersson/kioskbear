@@ -16,6 +16,8 @@ spec:
       labels:
         app: kioskbear
     spec:
+      imagePullSecrets:
+        - name: gcp-artifact-registry
       containers:
         - name: django
           image: europe-west1-docker.pkg.dev/roiiogcloud/kioskbear/kioskbear:latest
