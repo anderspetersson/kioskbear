@@ -118,7 +118,6 @@ requires-dist = [
     { name = "django-ninja", specifier = ">=1.6.2" },
     { name = "djangorestframework", specifier = "==3.17.1" },
     { name = "gunicorn", specifier = "==25.3.0" },
-    { name = "kioskbear" },
     { name = "markdown", specifier = "==3.10.2" },
     { name = "psycopg", specifier = ">=3.3.3" },
     { name = "psycopg-binary", specifier = ">=3.3.3" },
