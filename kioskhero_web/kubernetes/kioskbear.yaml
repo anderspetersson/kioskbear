@@ -45,6 +45,11 @@ spec:
                   key: password
             - name: DJANGO_CACHE_PREFIX
               value: "kioskbear"
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kioskbear-secret
+                  key: django-secret-key
             - name: DJANGO_SETTINGS_MODULE
               value: "kioskbear.conf.settings.production"
             - name: GUNICORN_CMD_ARGS

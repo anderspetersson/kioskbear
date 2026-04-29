@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-d-uh2yb@)ked=b3#-%@h(eo-z@aa9@mj_*ljm11+m7ich_8!fo"
+SECRET_KEY = (os.environ.get("DJANGO_SECRET_KEY"),)
 
 AUTH_USER_MODEL = "accounts.Account"
 LOGIN_REDIRECT_URL = "app:dashboard"
