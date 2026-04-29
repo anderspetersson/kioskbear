@@ -20,7 +20,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 ADD . /app
 
-WORKDIR /app/kioskhero_web
+WORKDIR /app/kioskbear_web
 
 ENV DJANGO_SETTINGS_MODULE=kioskbear.conf.settings.production
 
