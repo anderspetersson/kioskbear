@@ -1,0 +1,50 @@
+{
+  "terminal": {
+    "env": {
+      "DJANGO_SETTINGS_MODULE": "kioskbear.conf.settings.local",
+      "PYTHONWARNINGS": "default"
+    }
+  },
+  "auto_install_extensions": {
+    "ruff": true,
+    "ty": true,
+    "html": false
+  },
+  "lsp": {
+    "ty": {
+      "binary": {
+        "path": "./kioskbear_web/.venv/bin/ty",
+        "arguments": ["server"]
+      },
+      "settings": {
+        "diagnosticMode": "workspace"
+      }
+    }
+  },
+  "languages": {
+    "Python": {
+      "language_servers": ["ty", "ruff"],
+      "format_on_save": "on",
+      "formatter": [
+        { "code_action": "source.organizeImports" },
+        { "code_action": "source.fixAll" },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        }
+      ]
+    },
+    "HTML": {
+      "format_on_save": "off",
+      "formatter": [
+        {
+          "external": {
+            "command": "uvx",
+            "arguments": [ "djlint", "-", "--reformat", "{buffer_path}"]
+          }
+        }
+      ]
+    }
+  }
+}
