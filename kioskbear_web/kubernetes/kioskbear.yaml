@@ -15,6 +15,7 @@ spec:
     metadata:
       labels:
         app: kioskbear
+        network-postgres: allow
     spec:
       imagePullSecrets:
         - name: gcp-artifact-registry
