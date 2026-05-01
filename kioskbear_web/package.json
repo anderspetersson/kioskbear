@@ -1,8 +1,8 @@
 {
   "main": "kioskbear/static/src/js/app.js",
   "scripts": {
-    "dev": "npx tailwindcss -i kioskbear/static/src/css/app.css -o kioskbear/static/dist/css/app.css --watch",
-    "build": "npx tailwindcss -i kioskbear/static/src/css/app.css -o kioskbear/static/dist/css/app.css --minify"
+    "dev": "npx tailwindcss -i kioskbear/static/css/app.css -o kioskbear/static/css/output.css --watch",
+    "build": "npx tailwindcss -i kioskbear/static/css/app.css -o kioskbear/static/css/output.css --minify"
   },
   "devDependencies": {
     "daisyui": "^5.5.19",
