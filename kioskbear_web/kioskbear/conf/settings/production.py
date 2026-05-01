@@ -38,6 +38,15 @@ sentry_sdk.init(
     profiles_sample_rate=0.1,
 )
 
+# Email
+DEFAULT_FROM_EMAIL = "Kioskbear <info+noreply@mg.kioskbear.com>"
+SERVER_EMAIL = "Kioskbear <info+noreply@mg.kioskbear.com>"
+EMAIL_BACKEND: str = "anymail.backends.mailgun.EmailBackend"
+ANYMAIL = {
+    "MAILGUN_API_KEY": os.environ.get("MAILGUN_API_KEY"),
+    "MAILGUN_API_URL": "https://api.eu.mailgun.net/v3",
+}
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 USE_X_FORWARDED_HOST = True
